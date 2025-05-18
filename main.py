@@ -1,33 +1,32 @@
 
 from UI import interfaz as ui
-from UI import mensajes as mjs
 from Gestion import gestor
+from Gestion import automatico as auto
+from Gestion import calculo as cal
 
-ui.separador("linea")
-ui.mostrar_mensaje(mjs.mensaje_de_bienvenida, "linea")
+ui.mostrar_bienvenida()
 
-usuario = gestor.pedir_datos("Quieres probar? (si/no): ", "texto")
-ui.separador("linea")
+usuario = gestor.pedir_confirmacion("probar")
+ui.mostrar_separador("linea")
+
 if usuario == "si":
-    automatico = gestor.pedir_datos("Quieres que haga la cuenta automaticamente?: ", "texto")
-    ui.separador("espacio")
-    gestor.modo_automatico(automatico)
+    automatico = gestor.pedir_confirmacion("modo_automatico")
+    ui.mostrar_separador("espacio")
+    auto.modo_automatico(automatico)
+    
     if automatico == "si":
-        numero = int(gestor.pedir_datos("Dame un numero: "))
-        ui.separador("linea")
-        gestor.calculo_automatico(numero)
+        numero = gestor.pedir_numero()
+        ui.mostrar_separador("linea")
+        cal.calculo_automatico(numero)
+        ui.mostrar_mensaje(f"Numero {numero} convertido a 5", "linea")
     
     elif automatico == "no":
-        while True:
-            try:
-                numero = int(gestor.pedir_datos("Dame un numero: "))
-                ui.separador("espacio")
-                gestor.calculo_manual(numero)
-                ui.mostrar_mensaje(f"Numero {numero} comvertido a 5", "linea")
-                break
-            except ValueError:
-                ui.mostrar_mensaje("[ERROR] Valor invalido ingrese un numero valido")
-                break
-
+        numero = gestor.pedir_numero()
+        ui.mostrar_separador("linea")
+        cal.calculo_manual(numero)
+        ui.mostrar_mensaje(f"Numero {numero} convertido a 5", "linea")
+    
+    else:
+        ui.mostrar_error("error", "modo_automatico", "linea")
 elif usuario == "no":
-    ui.mostrar_mensaje("Bueno nos vemos luego...", "linea")
+    ui.mostrar_despedida()
